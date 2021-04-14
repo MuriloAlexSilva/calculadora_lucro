@@ -1,3 +1,5 @@
+import 'package:calculadora_lucro/app/views/margem_desejada.dart';
+import 'package:calculadora_lucro/app/views/margem_obtida.dart';
 import 'package:flutter/material.dart';
 import 'app/views/home_page.dart';
 
@@ -11,7 +13,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.brown[700]),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/margemObtida': (context) => MargemObtidaPage(),
+        '/margemDesejada': (context) => MargemDesejadaPage()
+      },
     );
   }
 }
