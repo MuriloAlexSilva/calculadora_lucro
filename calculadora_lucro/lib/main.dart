@@ -1,7 +1,7 @@
-import 'package:calculadora_lucro/app/views/margem_desejada.dart';
-import 'package:calculadora_lucro/app/views/margem_obtida.dart';
 import 'package:flutter/material.dart';
 import 'app/views/home_page.dart';
+import 'app/views/margem_instagram.dart';
+import 'app/views/margem_meLi.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
-        '/margemObtida': (context) => MargemObtidaPage(),
-        '/margemDesejada': (context) => MargemDesejadaPage()
+        '/margemMeLi': (context) => MargemMeLiPage(),
+        '/margemInstagram': (context) => MargemInstagramPage()
       },
     );
   }
