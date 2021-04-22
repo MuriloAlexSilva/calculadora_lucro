@@ -11,6 +11,8 @@ class _MargemMeLiPageState extends State<MargemMeLiPage> {
   TextEditingController _classicoController = TextEditingController();
   TextEditingController _premiumController = TextEditingController();
   TextEditingController _vendaController = TextEditingController();
+  GlobalKey<FormState> _key =
+      GlobalKey<FormState>(); // Chave para utilizar os validators dos textfield
 
   double taxaFixa = 5;
   double custo;
@@ -82,96 +84,106 @@ class _MargemMeLiPageState extends State<MargemMeLiPage> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextFieldCustom(
-                controller: _custoController,
-                hint: 'Valor',
-                label: 'Digite o valor do Custo',
-                icon: Icon(Icons.monetization_on_outlined),
-              ),
-              TextFieldCustom(
-                controller: _classicoController,
-                label: 'Digite a taxa do Anúncio Clássico',
-                hint: 'Valor em Porcentagem',
-                icon: Icon(Icons.account_balance),
-              ),
-              TextFieldCustom(
-                controller: _premiumController,
-                label: 'Digite a taxa do Anúncio Premium',
-                hint: 'Valor em Porcentagem',
-                icon: Icon(Icons.account_balance),
-              ),
-              TextFieldCustom(
-                controller: _vendaController,
-                label: 'Digite o preço de Venda Desejado',
-                hint: 'Valor',
-                icon: Icon(Icons.account_balance),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Container(
-                  width: double.infinity,
-                  child: FlatButton(
-                    onPressed: () {
-                      custo = double.tryParse(_custoController.text);
-                      venda = double.tryParse(_vendaController.text);
+          child: Form(
+            key: _key,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TextFieldCustom(
+                  text: "Insira o valor do Custo",
+                  controller: _custoController,
+                  hint: 'Valor',
+                  label: 'Digite o valor do Custo',
+                  icon: Icon(Icons.monetization_on_outlined),
+                ),
+                TextFieldCustom(
+                  text: "Insira a taxa desejada",
+                  controller: _classicoController,
+                  label: 'Digite a taxa do Anúncio Clássico',
+                  hint: 'Valor em Porcentagem',
+                  icon: Icon(Icons.account_balance),
+                ),
+                TextFieldCustom(
+                  text: "Insira a taxa desejada",
+                  controller: _premiumController,
+                  label: 'Digite a taxa do Anúncio Premium',
+                  hint: 'Valor em Porcentagem',
+                  icon: Icon(Icons.account_balance),
+                ),
+                TextFieldCustom(
+                  text: "Insira o preço desejado",
+                  controller: _vendaController,
+                  label: 'Digite o preço de Venda Desejado',
+                  hint: 'Valor',
+                  icon: Icon(Icons.account_balance),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Container(
+                    width: double.infinity,
+                    child: FlatButton(
+                      onPressed: () {
+                        if (_key.currentState.validate()) {
+                          custo = double.tryParse(_custoController.text);
+                          venda = double.tryParse(_vendaController.text);
 
-                      setState(() {
-                        classico = (venda *
-                                double.tryParse(_classicoController.text)) /
-                            100;
-
-                        premium =
-                            (venda * double.tryParse(_premiumController.text)) /
+                          setState(() {
+                            classico = (venda *
+                                    double.tryParse(_classicoController.text)) /
                                 100;
 
-                        lucroClassico = venda - (classico + custo + taxaFixa);
-                        lucroPremium = venda - (premium + custo + taxaFixa);
-                        margemClassico = (lucroClassico * 100) / custo;
-                        margemPremium = (lucroPremium * 100) / custo;
+                            premium = (venda *
+                                    double.tryParse(_premiumController.text)) /
+                                100;
 
-                        isEmptyClassico();
-                        isEmptyPremium();
-                      });
-                    },
-                    child: Text(
-                      'Calcular',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                            lucroClassico =
+                                venda - (classico + custo + taxaFixa);
+                            lucroPremium = venda - (premium + custo + taxaFixa);
+                            margemClassico = (lucroClassico * 100) / custo;
+                            margemPremium = (lucroPremium * 100) / custo;
+
+                            isEmptyClassico();
+                            isEmptyPremium();
+                          });
+                        }
+                      },
+                      child: Text(
+                        'Calcular',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      color: Colors.brown[700],
+                      height: 50,
                     ),
-                    color: Colors.brown[700],
-                    height: 50,
                   ),
                 ),
-              ),
-              Divider(height: 40),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                    child: Text(
-                  textoClassico,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                    child: Text(
-                  textoPremium,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                )),
-              ),
-            ],
+                Divider(height: 40),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                      child: Text(
+                    textoClassico,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                      child: Text(
+                    textoPremium,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  )),
+                ),
+              ],
+            ),
           ),
         ),
       ),
